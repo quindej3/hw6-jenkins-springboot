@@ -10,14 +10,19 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn -B clean package -DskipTests'
+                // run Maven inside the Spring Boot project folder
+                dir('hw6-springboot') {
+                    sh 'mvn -B clean package -DskipTests'
+                }
             }
         }
     }
 
     post {
         success {
-            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            // archive the built JAR from the subfolder
+            archiveArtifacts artifacts: 'hw6-springboot/target/*.jar', fingerprint: true
         }
     }
 }
+
